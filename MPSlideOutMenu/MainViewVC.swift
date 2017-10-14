@@ -18,8 +18,12 @@ class MainViewVC: UIViewController {
     
     var menuXConstant : NSLayoutConstraint!
     var viewXConstant : NSLayoutConstraint!
+    var rightViewX : NSLayoutConstraint!
     
     var slideMenuOpen = false
+    var rightMenuOpen = false
+    
+    var centerX = CGFloat()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,28 +42,85 @@ class MainViewVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(viewTapped), name: NSNotification.Name("ViewTapped"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(rightViewTapped), name: NSNotification.Name("RightViewTapped"), object: nil)
+        
         setupMainView.mainViewVC = self
         setupMainView.setupViews()
         
+        setupRightViewController()
         setupViewController()
+        
         setupMenuViewController()
+        
         
         windowSize = window.frame.size.width
         
         menuXConstant.constant = -windowSize
         viewXConstant.constant = 0
+        rightViewX.constant = 0
         
         print(window.frame.size.width)
         
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
-//        view.isUserInteractionEnabled = true
-//        view.addGestureRecognizer(tapGestureRecognizer)
-
+//        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleLeftEdgeGesture))
+//        edgePan.edges = .left
+//        edgePan.delegate = self as? UIGestureRecognizerDelegate
+//        view.addGestureRecognizer(edgePan)
+//        
+//        centerX = self.view.frame.size.width
         
+    }
+    
+//    func handleLeftEdgeGesture(_ gesture: UIScreenEdgePanGestureRecognizer) {
+//        // Get the current view we are touching
+//        let view: UIView? = self.view.hitTest(gesture.location(in: gesture.view), with: nil)
+//        if .began == gesture.state || .changed == gesture.state {
+//            let translation: CGPoint = gesture.translation(in: gesture.view)
+//            // Move the view's center using the gesture
+//            view?.center = CGPoint(x: centerX + translation.x, y: (view?.center.y)!)
+//        }
+//        else {
+//            // cancel, fail, or ended
+//            // Animate back to center x
+//            UIView.animate(withDuration: 0.3, animations: {() -> Void in
+//                view?.center = CGPoint(x: self.centerX, y: (view?.center.y)!)
+//            })
+//        }
+//    }
+//    
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        // You can customize the way in which gestures can work
+//        // Enabling multiple gestures will allow all of them to work together, otherwise only the topmost view's gestures will work (i.e. PanGesture view on bottom)
+//        return true
+//    }
+    
+//    func screenEdgeSwiped(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+//        if recognizer.state == .recognized {
+//            print("Screen edge swiped!")
+//            
+//            view.frame.origin.x += setupMainView.containerView.frame.origin.x
+//        }
+//    }
+    
+    func rightViewTapped() {
+        print("right view notification...")
+        
+        if rightMenuOpen {
+            rightMenuOpen = false
+            self.viewXConstant.constant = 0
+        } else {
+            rightMenuOpen = true
+            self.viewXConstant.constant = -windowSize + menuWidthGap
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+
     }
     
     func viewTapped() {
         slideMenuOpen = false
+        rightMenuOpen = false
         self.menuXConstant.constant = -windowSize
         self.viewXConstant.constant = 0
         
@@ -118,6 +179,7 @@ class MainViewVC: UIViewController {
         
     }
     
+    //MARK: Left View
     func setupMenuViewController() {
         let controller = MenuLeftVC()
         addChildViewController(controller)
@@ -134,6 +196,24 @@ class MainViewVC: UIViewController {
         controller.didMove(toParentViewController: self)
     }
     
+    //MARK: Right View
+    func setupRightViewController() {
+        let controller = RightViewVC()
+        addChildViewController(controller)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(controller.view)
+        
+        rightViewX = controller.view.rightAnchor.constraint(equalTo: setupMainView.containerView.rightAnchor, constant: 0)
+        rightViewX.isActive = true
+        
+        controller.view.centerYAnchor.constraint(equalTo: setupMainView.containerView.centerYAnchor).isActive = true
+        controller.view.heightAnchor.constraint(equalTo: setupMainView.containerView.heightAnchor).isActive = true
+        controller.view.widthAnchor.constraint(equalTo: setupMainView.containerView.widthAnchor).isActive = true
+        
+        controller.didMove(toParentViewController: self)
+    }
+    
+    //MARK: Middle View
     func setupViewController() {
         let controller = AnotherViewVC()
         

@@ -23,6 +23,7 @@ class AnotherViewVC: UIViewController {
         view.backgroundColor = UIColor.blue
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(buttonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(rightView))
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         view.isUserInteractionEnabled = true
@@ -30,6 +31,10 @@ class AnotherViewVC: UIViewController {
         
     }
     
+    func rightView() {
+        print("going to right view")
+        NotificationCenter.default.post(name: NSNotification.Name("RightViewTapped"), object: nil)
+    }
     
     func viewTapped() {
         print("just tapped the view")

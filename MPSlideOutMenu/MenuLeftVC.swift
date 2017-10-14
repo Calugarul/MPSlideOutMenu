@@ -26,7 +26,12 @@ class MenuLeftVC: UITableViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
+       
         
+    }
+    
+    func panWithFinger(sender: UIPanGestureRecognizer) {
+        print("started panning")
         
     }
     
@@ -35,6 +40,13 @@ class MenuLeftVC: UITableViewController {
         super.viewDidAppear(true)
         print("did apear")
         tableView.contentInset = UIEdgeInsetsMake(0, menuWidthGap, 0, -menuWidthGap)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        print("will appear")
+        tableView.contentInset = UIEdgeInsetsMake(0, menuWidthGap, 0, -menuWidthGap)
+        
     }
     
     func selectCell() {
@@ -48,23 +60,26 @@ class MenuLeftVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return 20
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")!
-        cell.contentView.reloadInputViews()
         
         cell.isSelected = false
         tableView.contentInset = UIEdgeInsetsMake(0, menuWidthGap, 0, -menuWidthGap)
-//        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+
         
         cell.contentView.backgroundColor = UIColor.yellow
         cell.textLabel?.text = "Daim Boy"
         
         
+        
         return cell
     }
+    
+    
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -78,8 +93,12 @@ class MenuLeftVC: UITableViewController {
         if selectedCell.textLabel?.text == "Daim Boy" {
             print("cell is selected")
             UIView.animate(withDuration: 0.3, animations: {
-                tableView.contentInset = UIEdgeInsetsMake(0, menuWidthGap, 0, -menuWidthGap)
+                tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
                 self.selectCell()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { 
+                    self.viewWillAppear(true)
+                })
+                
                 //selectedCell.isSelected = false
                 
             })

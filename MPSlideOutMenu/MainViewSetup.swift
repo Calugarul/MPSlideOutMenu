@@ -26,11 +26,20 @@ class MainViewSetup: NSObject {
         return container
     }()
     
+    let containerRightView : UIView = {
+        let container = UIView()
+        container.backgroundColor = UIColor.gray
+        container.translatesAutoresizingMaskIntoConstraints = false
+        return container
+    }()
+
+    
     func setupViews() {
         print("setup MAIN")
         
         mainViewVC?.view.addSubview(containerView)
         mainViewVC?.view.addSubview(containerViewSlide)
+        mainViewVC?.view.addSubview(containerRightView)
         
         NSLayoutConstraint.activate([
             containerView.centerXAnchor.constraint(equalTo: (mainViewVC?.view.centerXAnchor)!),
@@ -44,6 +53,13 @@ class MainViewSetup: NSObject {
             containerViewSlide.centerYAnchor.constraint(equalTo: (mainViewVC?.view.centerYAnchor)!),
             containerViewSlide.heightAnchor.constraint(equalTo: (mainViewVC?.view.heightAnchor)!),
             containerViewSlide.widthAnchor.constraint(equalTo: (mainViewVC?.view.widthAnchor)!)
+            ])
+        
+        NSLayoutConstraint.activate([
+            containerRightView.centerXAnchor.constraint(equalTo: (mainViewVC?.view.centerXAnchor)!),
+            containerRightView.centerYAnchor.constraint(equalTo: (mainViewVC?.view.centerYAnchor)!),
+            containerRightView.heightAnchor.constraint(equalTo: (mainViewVC?.view.heightAnchor)!),
+            containerRightView.widthAnchor.constraint(equalTo: (mainViewVC?.view.widthAnchor)!)
             ])
     }
 }
