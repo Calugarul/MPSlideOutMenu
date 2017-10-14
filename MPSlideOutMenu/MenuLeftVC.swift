@@ -17,7 +17,7 @@ class MenuLeftVC: UITableViewController {
         let window = UIWindow.init(frame: UIScreen.main.bounds)
         window.makeKeyAndVisible()
         
-        view.backgroundColor = UIColor.red
+        view.backgroundColor = UIColor.yellow
         navigationController?.isNavigationBarHidden = true
         
         tableView.dataSource = self
@@ -25,6 +25,22 @@ class MenuLeftVC: UITableViewController {
         tableView.showsVerticalScrollIndicator = false
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+        
+        
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        print("did apear")
+        tableView.contentInset = UIEdgeInsetsMake(0, menuWidthGap, 0, -menuWidthGap)
+    }
+    
+    func selectCell() {
+        print("selected cell - >")
+        
+        NotificationCenter.default.post(name: NSNotification.Name("SelectedCell"), object: nil)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -37,14 +53,47 @@ class MenuLeftVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")!
+        cell.contentView.reloadInputViews()
         
+        cell.isSelected = false
         tableView.contentInset = UIEdgeInsetsMake(0, menuWidthGap, 0, -menuWidthGap)
+//        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
         
         cell.contentView.backgroundColor = UIColor.yellow
         cell.textLabel?.text = "Daim Boy"
         
+        
         return cell
     }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCell:UITableViewCell = tableView.cellForRow(at: indexPath)!
+        selectedCell.contentView.backgroundColor = UIColor.red
+        
+        selectedCell.isSelected = false
+        
+        if selectedCell.isSelected == true {
+        print("selection")
+        if selectedCell.textLabel?.text == "Daim Boy" {
+            print("cell is selected")
+            UIView.animate(withDuration: 0.3, animations: {
+                tableView.contentInset = UIEdgeInsetsMake(0, menuWidthGap, 0, -menuWidthGap)
+                self.selectCell()
+                //selectedCell.isSelected = false
+                
+            })
+            
+        }
+            
+        }
+        
+        
+    }
+    
+    
+    
+    
 
     
 }

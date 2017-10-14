@@ -14,14 +14,14 @@ class MainViewSetup: NSObject {
     
     let containerView : UIView = {
         let container = UIView()
-        container.backgroundColor = .green
+        container.backgroundColor = .yellow
         container.translatesAutoresizingMaskIntoConstraints = false
         return container
     }()
     
     let containerViewSlide : UIView = {
         let container = UIView()
-        container.backgroundColor = .green
+        container.backgroundColor = .blue
         container.translatesAutoresizingMaskIntoConstraints = false
         return container
     }()

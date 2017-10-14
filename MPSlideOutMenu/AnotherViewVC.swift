@@ -24,7 +24,16 @@ class AnotherViewVC: UIViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(buttonTapped))
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(tapGestureRecognizer)
         
+    }
+    
+    
+    func viewTapped() {
+        print("just tapped the view")
+        NotificationCenter.default.post(name: NSNotification.Name("ViewTapped"), object: nil)
     }
     
     func buttonTapped() {

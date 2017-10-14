@@ -34,6 +34,10 @@ class MainViewVC: UIViewController {
        
         NotificationCenter.default.addObserver(self, selector: #selector(menuButtonAction), name: NSNotification.Name("ToogleMenu"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(tapSelectedCell), name: NSNotification.Name("SelectedCell"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(viewTapped), name: NSNotification.Name("ViewTapped"), object: nil)
+        
         setupMainView.mainViewVC = self
         setupMainView.setupViews()
         
@@ -47,22 +51,50 @@ class MainViewVC: UIViewController {
         
         print(window.frame.size.width)
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(tapGestureRecognizer)
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
+//        view.isUserInteractionEnabled = true
+//        view.addGestureRecognizer(tapGestureRecognizer)
 
         
     }
     
-    func buttonTapped() {
-        print("tap to close")
-        
+    func viewTapped() {
         slideMenuOpen = false
         self.menuXConstant.constant = -windowSize
         self.viewXConstant.constant = 0
         
         UIView.animate(withDuration: 0.3) {
+            
             self.view.layoutIfNeeded()
+            
+        }
+
+    }
+    
+    
+    
+    func tapSelectedCell() {
+        print("tap to close")
+        let window = UIScreen.main.bounds
+        self.setupMainView.containerView.frame.size.width = window.width
+        
+        slideMenuOpen = false
+        self.menuXConstant.constant = 0
+        self.viewXConstant.constant = windowSize
+        
+        UIView.animate(withDuration: 0.3) {
+            
+            self.view.layoutIfNeeded()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                UIView.animate(withDuration: 0.2, animations: {
+                    
+                    self.menuXConstant.constant = -windowSize
+                    self.viewXConstant.constant = 0
+                    self.view.layoutIfNeeded()
+                })
+            })
+            
         }
         
     }
