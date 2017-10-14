@@ -13,10 +13,21 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var initialViewController :UIViewController?
+    var navigationBarAppearace = UINavigationBar.appearance()
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        //MARK: Important - Setting up the first view
+        initialViewController = MainViewVC()
+        if window == self.window {
+            self.window?.backgroundColor = UIColor.white
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window?.rootViewController = UINavigationController(rootViewController: initialViewController!)
+            window?.makeKeyAndVisible()
+        }
+        
         return true
     }
 
