@@ -45,9 +45,25 @@ class MainViewVC: UIViewController {
         menuXConstant.constant = -windowSize
         viewXConstant.constant = 0
         
-        menuWidthGap = 40
-        
         print(window.frame.size.width)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(buttonTapped))
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(tapGestureRecognizer)
+
+        
+    }
+    
+    func buttonTapped() {
+        print("tap to close")
+        
+        slideMenuOpen = false
+        self.menuXConstant.constant = -windowSize
+        self.viewXConstant.constant = 0
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
         
     }
     
